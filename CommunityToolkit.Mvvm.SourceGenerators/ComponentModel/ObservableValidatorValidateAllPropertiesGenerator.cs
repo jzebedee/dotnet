@@ -20,7 +20,6 @@ namespace CommunityToolkit.Mvvm.SourceGenerators;
 /// <summary>
 /// A source generator for properties validation without relying on compiled LINQ expressions.
 /// </summary>
-[Generator]
 public sealed partial class ObservableValidatorValidateAllPropertiesGenerator : ISourceGenerator
 {
     /// <inheritdoc/>
