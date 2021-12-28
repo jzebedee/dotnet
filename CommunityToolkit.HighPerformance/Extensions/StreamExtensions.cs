@@ -157,6 +157,9 @@ public static class StreamExtensions
             ArrayPool<byte>.Shared.Return(rent);
         }
     }
+#else
+    public static int Read(this Stream stream, Span<byte> buffer) => stream.Read(buffer);
+    public static void Write(this Stream stream, ReadOnlySpan<byte> buffer) => stream.Write(buffer);
 #endif
 
     /// <summary>
