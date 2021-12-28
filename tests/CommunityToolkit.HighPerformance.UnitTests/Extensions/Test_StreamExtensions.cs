@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using CommunityToolkit.HighPerformance;
+using CommunityToolkit.HighPerformance.Aliased;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CommunityToolkit.HighPerformance.UnitTests.Extensions;
@@ -28,6 +29,9 @@ public class Test_StreamExtensions
 
         _ = Assert.ThrowsException<ArgumentException>(() => stream.Write(long.MaxValue));
 
+        ReadOnlySpan<byte> writeBytes = stackalloc byte[] { 0xFF, 0xAA };
+        stream.WriteExtension(writeBytes);
+
         stream.Position = 0;
 
         Assert.AreEqual(true, stream.Read<bool>());
@@ -36,5 +40,10 @@ public class Test_StreamExtensions
         Assert.AreEqual(unchecked(uint.MaxValue * 324823489204ul), stream.Read<ulong>());
 
         _ = Assert.ThrowsException<InvalidOperationException>(() => stream.Read<long>());
+
+        stream.Position -= 2;
+        Span<byte> readBytes = stackalloc byte[2];
+        stream.ReadExtension(readBytes);
+        Assert.IsTrue(writeBytes.SequenceEqual(readBytes));
     }
 }

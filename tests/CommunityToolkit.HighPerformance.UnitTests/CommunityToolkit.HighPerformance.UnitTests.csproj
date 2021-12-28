@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CommunityToolkit.HighPerformance.Aliased\CommunityToolkit.HighPerformance.Aliased.csproj" />
     <ProjectReference Include="..\..\CommunityToolkit.HighPerformance\CommunityToolkit.HighPerformance.csproj" />
   </ItemGroup>
 
