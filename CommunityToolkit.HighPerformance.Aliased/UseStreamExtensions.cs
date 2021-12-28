@@ -15,5 +15,5 @@ public static class UseStreamExtensions
     /// <summary>
     /// Explicit call using the CT.HP Stream.Read extension
     /// </summary>
-    public static void ReadExtension(this Stream stream, Span<byte> span) => stream.Read(span);
+    public static int ReadExtension(this Stream stream, Span<byte> span) => stream.Read(span);
 }

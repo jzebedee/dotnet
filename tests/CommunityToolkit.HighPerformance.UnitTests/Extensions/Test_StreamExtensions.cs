@@ -43,7 +43,7 @@ public class Test_StreamExtensions
 
         stream.Position -= 2;
         Span<byte> readBytes = stackalloc byte[2];
-        stream.ReadExtension(readBytes);
+        _ = stream.ReadExtension(readBytes);
         Assert.IsTrue(writeBytes.SequenceEqual(readBytes));
     }
 }
