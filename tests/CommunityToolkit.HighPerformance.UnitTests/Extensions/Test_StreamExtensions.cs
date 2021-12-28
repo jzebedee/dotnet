@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using CommunityToolkit.HighPerformance;
+using CommunityToolkit.HighPerformance.Aliased;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests.HighPerformance.Extensions
@@ -29,6 +30,9 @@ namespace UnitTests.HighPerformance.Extensions
 
             Assert.ThrowsException<ArgumentException>(() => stream.Write(long.MaxValue));
 
+            ReadOnlySpan<byte> writeBytes = stackalloc byte[] { 0xFF, 0xAA };
+            stream.WriteExtension(writeBytes);
+
             stream.Position = 0;
 
             Assert.AreEqual(true, stream.Read<bool>());
@@ -36,7 +40,38 @@ namespace UnitTests.HighPerformance.Extensions
             Assert.AreEqual(3.14f, stream.Read<float>());
             Assert.AreEqual(unchecked(uint.MaxValue * 324823489204ul), stream.Read<ulong>());
 
-            Assert.ThrowsException<InvalidOperationException>(() => stream.Read<long>());
+            _ = Assert.ThrowsException<InvalidOperationException>(() => stream.Read<long>());
+
+            stream.Position -= 2;
+            Span<byte> readBytes = stackalloc byte[2];
+            stream.ReadExtension(readBytes);
+            Assert.IsTrue(writeBytes.SequenceEqual(readBytes));
         }
+
+        //[TestMethod]
+        //public void Test_StreamExtensions_ReadWrite_ThrowsMissingMethodException()
+        //{
+        //    // bool (1), int (4), float (4), long (8) = 17 bytes.
+        //    // Leave two extra bytes for the partial read (fail).
+        //    Stream stream = new byte[19].AsMemory().AsStream();
+
+        //    stream.Write(true);
+        //    stream.Write(42);
+        //    stream.Write(3.14f);
+        //    stream.Write(unchecked(uint.MaxValue * 324823489204ul));
+
+        //    Assert.AreEqual(stream.Position, 17);
+
+        //    _ = Assert.ThrowsException<ArgumentException>(() => stream.Write(long.MaxValue));
+
+        //    stream.Position = 0;
+
+        //    Assert.AreEqual(true, stream.Read<bool>());
+        //    Assert.AreEqual(42, stream.Read<int>());
+        //    Assert.AreEqual(3.14f, stream.Read<float>());
+        //    Assert.AreEqual(unchecked(uint.MaxValue * 324823489204ul), stream.Read<ulong>());
+
+        //    _ = Assert.ThrowsException<InvalidOperationException>(() => stream.Read<long>());
+        //}
     }
 }

@@ -102,6 +102,7 @@ namespace UnitTests.HighPerformance.Extensions
             Assert.IsTrue(span.SequenceEqual(buffer.AsSpan().AsBytes()));
         }
 
+#if !NETFRAMEWORK
         [TestCategory("IBufferWriterExtensions")]
         [TestMethod]
         public void Test_IBufferWriterExtensions_WriteReadOverItems_ReadOnlySpan()
@@ -125,5 +126,6 @@ namespace UnitTests.HighPerformance.Extensions
 
             Assert.IsTrue(span.SequenceEqual(buffer.AsSpan()));
         }
+#endif
     }
 }
